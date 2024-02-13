@@ -1,0 +1,67 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dxt_crm_view
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-13 09:47+0000\n"
+"PO-Revision-Date: 2023-06-13 09:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: dxt_crm_view
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_partner__is_student
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_users__is_student
+msgid "Alumno"
+msgstr "Alumno"
+
+#. module: dxt_crm_view
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_partner__bank
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_users__bank
+msgid "Bank"
+msgstr "Banco"
+
+#. module: dxt_crm_view
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_partner__bank_account
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_users__bank_account
+msgid "Bank account"
+msgstr "Cuenta"
+
+#. module: dxt_crm_view
+#: model:ir.model,name:dxt_crm_view.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: dxt_crm_view
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_partner__date_birth
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_users__date_birth
+msgid "Date of Birth"
+msgstr "Fecha nacimiento"
+
+#. module: dxt_crm_view
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_partner__ref_alexia
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_users__ref_alexia
+msgid "Id Alexia"
+msgstr "Id Alexia"
+
+#. module: dxt_crm_view
+#: model_terms:ir.ui.view,arch_db:dxt_crm_view.crm_lead_view_form
+msgid "Nombre del alumno"
+msgstr "Nombre del alumno"
+
+#. module: dxt_crm_view
+#: model_terms:ir.ui.view,arch_db:dxt_crm_view.base_view_partner_form
+msgid "Student"
+msgstr "Alumno"
+
+#. module: dxt_crm_view
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_partner__tutor
+#: model:ir.model.fields,field_description:dxt_crm_view.field_res_users__tutor
+msgid "Tutor"
+msgstr "Tutor"
