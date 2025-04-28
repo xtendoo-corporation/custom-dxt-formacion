@@ -62,6 +62,7 @@ class CrmLead(models.Model):
         defaults = {
             'name': msg_dict.get('subject') or _("No Subject"),
             'email_from': email_from,
+            'partner_id': False,
             'company_id': company_id.id,
             'phone': extracted_data.get('phone', False),
             'contact_name': extracted_data.get('name', False),
