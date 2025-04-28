@@ -38,11 +38,6 @@ class CrmLead(models.Model):
             through message_process.
             This override updates the document according to the email.
         """
-        # remove default author when going through the mail gateway. Indeed we
-        # do not want to explicitly set an user as responsible. We prefer that
-        # assignment is done automatically (scoring) or manually. Otherwise it
-        # would always be either root (gateway user) either alias owner (through
-        # alias_user_id). It also allows to exclude portal / public users.
         self = self.with_context(default_user_id=False)
 
         if custom_values is None:
@@ -51,20 +46,22 @@ class CrmLead(models.Model):
         company_id = self.env['res.company'].search([('name', 'ilike', 'DXT Formacion Deportiva')], limit=1)
         team_id = self.env['crm.team'].search([('name', 'ilike', 'Ventas')], limit=1)
         extracted_data = self._extract_data_from_body(body)
+        email_from = msg_dict.get('from')
+        if extracted_data.get('email'):
+            email_from = extracted_data.get('email')
         description_text=""
         if extracted_data.get('center'):
             description_text = f"Centro: {extracted_data.get('center')}<br>"
         if extracted_data.get('msg_txt'):
             description_text += f"Texto de mensaje:<br>"
-            # description_text += f"{extracted_data.get('msg_txt')}<br>"
             description_text += f"{self.format_text_with_breaks(extracted_data.get('msg_txt'))}<br>"
         if extracted_data.get('private_policy'):
             description_text += f"{extracted_data.get('private_policy')}"
 
+
         defaults = {
             'name': msg_dict.get('subject') or _("No Subject"),
-            'email_from': msg_dict.get('from'),
-            'partner_id': msg_dict.get('author_id', False),
+            'email_from': email_from,
             'company_id': company_id.id,
             'phone': extracted_data.get('phone', False),
             'contact_name': extracted_data.get('name', False),
