@@ -1,0 +1,45 @@
+<odoo>
+    <data>
+        <!-- Reserva -->
+        <record id="email_template_crm_lead" model="mail.template">
+            <field name="name">Reserva</field>
+            <field name="model_id" ref="model_crm_lead"/>
+            <field name="email_from">remite@example.com</field>
+            <field name="subject">Asunto del Correo</field>
+            <field name="body_html" type="html">
+                <div id="content"
+                     style="clear:both;width:80%;margin:10px auto;font-size:1.5em;color:black;">
+                    <p>Hola
+                        <t t-out="object_name" data-oe-t-inline="true" contenteditable="false"/></p>
+                    <p>
+                        Para finalizar su inscripción, debe acceder al siguiente enlace:
+                     </p>
+                    <a href="{{ base_url }}/my/leads/{{ object_id }}?access_token={{ access_token }}">Completa el formulario y reserva tu plaza</a>
+                </div>
+            </field>
+        </record>
+        <!-- Fin Reserva -->
+        <!-- Informado -->
+        <record id="email_template_crm_lead_informado" model="mail.template">
+            <field name="name">Informado</field>
+            <field name="model_id" ref="model_crm_lead"/>
+            <field name="email_from">remite@example.com</field>
+            <field name="subject">Asunto del Correo</field>
+            <field name="lang">{{object.partner_id.lang}}</field>
+            <field name="body_html" type="html">
+                <div id="content"
+                     style="clear:both;width:80%;margin:10px auto;font-size:1.5em;color:black;">
+                    <p>Hola
+                        <t t-out="object_name or ''" contenteditable="false" data-oe-t-inline="true">Test</t>
+                    </p>
+                    <p>
+                        Para reservar su plaza, debe acceder al siguiente enlace:
+
+                     </p>
+                    <a href="{{ product_url }}">Reserva tu plaza aquí</a>
+                </div>
+            </field>
+        </record>
+        <!-- Fin Informado -->
+    </data>
+</odoo>

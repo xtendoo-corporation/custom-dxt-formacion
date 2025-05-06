@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Pagina del lead, con datos relleno y para firmar -->
+    <template id="lead_confirm_data_template" name="Mis Datos">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="False"/>
+            <t t-if="not lead">
+                <p>There are currently no CRM leads for your account.</p>
+            </t>
+            <t t-if="lead">
+                <t t-set="access_token" t-value="request.params.get('access_token')"/>
+                <h3 style="width:100%;text-align:center;display:block">Datos del alumno</h3>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12" name="student_data">
+                            <table class="table table-sm table-hover table-striped o_portal_my_leads_table">
+                                <tbody>
+                                    <tr>
+                                        <td>Nombre y apellidos</td>
+                                        <td>
+                                            <t t-esc="lead.partner_id and lead.partner_id.name or ''"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>NIF</td>
+                                        <td>
+                                            <t t-esc="lead.partner_id and lead.partner_id.vat or ''"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fecha nacimiento</td>
+                                        <td>
+                                            <t t-if="lead.partner_id and lead.partner_id.date_birth">
+                                                <t t-esc="lead.show_date_birth(lead.partner_id.date_birth)"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dirección</td>
+                                        <td>
+                                            <t t-esc="lead.partner_id and lead.partner_id.street or ''"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ciudad</td>
+                                        <td>
+                                            <t t-esc="lead.partner_id and lead.partner_id.city or ''"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>C.P.</td>
+                                        <td>
+                                            <t t-esc="lead.partner_id and lead.partner_id.zip or ''"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Provincia</td>
+                                        <td>
+                                            <t t-if="lead.partner_id and lead.partner_id.state_id">
+                                                <t t-esc="lead.get_state_name(lead.partner_id.state_id.id)"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>País</td>
+                                        <td>
+                                            <t t-if="lead.partner_id and lead.partner_id.country_id">
+                                                <t t-esc="lead.get_country_name(lead.partner_id.country_id.id)"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Teléfono</td>
+                                        <td>
+                                            <t t-esc="lead.partner_id and lead.partner_id.phone or ''"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Correo electrónico</td>
+                                        <td>
+                                            <t t-esc="lead.email_from and lead.email_from or ''"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tutor</td>
+                                        <td>
+                                            <t t-esc="lead.get_tutor()"/>
+                                        </td>
+                                    </tr>
+                                     <tr>
+                                        <td>Cuenta Bancaria</td>
+                                        <td>
+                                            <t t-esc="lead.partner_id and lead.partner_id.bank_account or ''"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>acepto para SEPA</td>
+                                        <td>
+                                            <t t-esc="lead.get_acept_sepa()"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <div class="col-sm-auto mt8">
+                                <a role="button" class="btn btn-primary" data-toggle="modal"
+                                   data-target="#modalacceptdata" href="#">Actualizar datos
+                                </a>
+                            </div>
+                            <!-- modal relative to the actions sign and pay -->
+                            <div id="quote_content" class="col-12 col-lg justify-content-end">
+                                <div role="dialog" class="modal fade" id="modalacceptdata">
+                                    <div class="modal-dialog">
+                                        <form id="acceptdata" method="POST" t-att-data-order-id="lead.id"
+                                              t-att-data-token="lead.access_token"
+                                              class="js_accept_json modal-content js_website_submit_form"
+                                              t-attf-data-action="/my/leads/1876/update_data?access_token=43c812eb-fa25-4de9-938d-696f12db60d6">
+                                            <input type="hidden" name="csrf_token"
+                                                   t-att-value="request.csrf_token()"/>
+                                            <header class="modal-header">
+                                                <h4 class="modal-title">Datos del alumno</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">×
+                                                </button>
+                                            </header>
+                                            <main class="modal-body" id="sign-dialog">
+
+                                                <input type="hidden" name="csrf_token"
+                                                       t-att-value="request.csrf_token()"/>
+
+                                                <tr>
+
+                                                </tr>
+
+                                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12 s_website_form_model_required"
+                                                         data-type="char"
+                                                         data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label"
+                                                                style="width: 200px"
+                                                                for="ocnawdmmdfb">
+                                                                <span class="s_website_form_label_content">Nombre y
+                                                                    apellidos
+                                                                </span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="text"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="name"
+                                                                       required="1"
+                                                                       placeholder="" id="ocnawdmmdfb"
+                                                                       data-fill-with="name"
+                                                                       t-att-value="lead.contact_name and lead.contact_name or ''"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12 s_website_form_custom s_website_form_required"
+                                                         data-type="char" data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="o0sixvg4gbx98">
+                                                                <span class="s_website_form_label_content">NIF</span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="text"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="vat"
+                                                                       required="1" value="" placeholder=""
+                                                                       id="o0sixvg4gbx98"
+                                                                       data-fill-with="undefined"
+                                                                       t-att-value="lead.partner_id and lead.partner_id.vat or ''"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12" data-type="date"
+                                                         data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="ozym0k224q2">
+                                                                <span class="s_website_form_label_content">Fecha
+                                                                    nacimiento
+                                                                </span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <div class="s_website_form_date input-group date"
+                                                                     id="datepicker8181671461750379"
+                                                                     data-target-input="nearest">
+                                                                    <input type="text"
+                                                                           class="form-control datetimepicker-input s_website_form_input"
+                                                                           data-target="#datepicker8181671461750379"
+                                                                           name="date_birth"
+                                                                           required="1"
+                                                                           placeholder="" id="ozym0k224q2"
+                                                                           data-fill-with="undefined"
+                                                                           t-att-value="lead.convert_date_to_datetime()"/>
+                                                                    <div class="input-group-append"
+                                                                         data-target="#datepicker8181671461750379"
+                                                                         data-toggle="datetimepicker">
+                                                                        <div class="input-group-text">
+                                                                            <i class="fa fa-calendar"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12" data-type="char"
+                                                         data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="oakbo8ibn1w">
+                                                                <span class="s_website_form_label_content">Dirección
+                                                                </span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="text"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="street" value="" placeholder=""
+                                                                       id="oakbo8ibn1w"
+                                                                       required="1"
+                                                                       data-fill-with="undefined"
+                                                                       t-att-value="lead.partner_id and lead.partner_id.street or ''"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12" data-type="char"
+                                                         data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="opqmvaiv8qq">
+                                                                <span class="s_website_form_label_content">Ciudad</span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="text"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="city"
+                                                                       required="1"
+                                                                       value="" placeholder="" id="opqmvaiv8qq"
+                                                                       data-fill-with="undefined"
+                                                                       t-att-value="lead.partner_id and lead.partner_id.city or ''"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12" data-type="char"
+                                                         data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="oxor4pkzhus">
+                                                                <span class="s_website_form_label_content">C.P.</span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="text"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="zip"
+                                                                       required="1"
+                                                                       value="" placeholder="" id="oxor4pkzhus"
+                                                                       data-fill-with="undefined"
+                                                                       t-att-value="lead.partner_id and lead.partner_id.zip or ''"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12"
+                                                         data-type="many2one"
+                                                         data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="o2urrjcrvru5">
+                                                                <span class="s_website_form_label_content">Provincia
+                                                                </span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <t t-set="states" t-value="lead._get_states()"/>
+                                                                <t t-set="state_selected"
+                                                                   t-value="lead.get_state_selected()"/>
+                                                                <select class="form-control s_website_form_input"
+                                                                        name="state_id"
+                                                                        required="1"
+                                                                        id="o2urrjcrvru5" style="">
+                                                                    <t t-foreach="states" t-as="state">
+                                                                        <option t-att-value="state.id"
+                                                                                t-att-selected="state.id == state_selected"
+                                                                        >
+                                                                            <t t-esc="state.name"/>
+                                                                        </option>
+                                                                    </t>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12"
+                                                         data-type="many2one"
+                                                         data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="o9rkukyl0m65">
+                                                                <span class="s_website_form_label_content">País</span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <t t-set="countries" t-value="lead._get_countries()"/>
+                                                                <t t-set="country_selected"
+                                                                   t-value="lead.partner_id and lead.partner_id.country_id.id or 'España'"/>
+                                                                <select class="form-control s_website_form_input"
+                                                                        name="country_id"
+                                                                        required="1"
+                                                                        id="o9rkukyl0m65" style="">
+                                                                    <t t-foreach="countries" t-as="country">
+                                                                        <option t-att-value="country.id"
+                                                                                t-att-selected="country.id == country_selected"
+                                                                        >
+                                                                            <t t-esc="country.name"/>
+                                                                        </option>
+                                                                    </t>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12 s_website_form_required"
+                                                         data-type="char" data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="o60ok7oknim">
+                                                                <span class="s_website_form_label_content">Teléfono
+                                                                </span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="text"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="phone" placeholder="" id="o60ok7oknim"
+                                                                       data-fill-with="phone" required="1"
+                                                                       t-att-value="lead.partner_id and lead.partner_id.phone or ''"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12 s_website_form_required"
+                                                         data-type="char" data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="otcnk1vbkebp">
+                                                                <span class="s_website_form_label_content">Correo
+                                                                    electrónico
+                                                                </span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="text"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="email" required="1" placeholder=""
+                                                                       id="otcnk1vbkebp"
+                                                                       data-fill-with="email"
+                                                                       t-att-value="lead.email_from and lead.email_from or ''"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12 s_website_form_required"
+                                                         data-type="char" data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="otcnk1vbkebpa">
+                                                                <span class="s_website_form_label_content">Tutor
+                                                                </span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="text"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="tutor" required="1" placeholder=""
+                                                                       id="otcnk1vbkebpa"
+                                                                       data-fill-with="tutor"
+                                                                       t-att-value="lead.partner_id and lead.partner_id.tutor or ''"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                     <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12 s_website_form_required"
+                                                         data-type="char" data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label
+                                                                class="col-form-label col-sm-auto s_website_form_label "
+                                                                style="width: 200px" for="otcnk1vbkebpaa">
+                                                                <span class="s_website_form_label_content">Cuenta Bancaria
+                                                                </span>
+                                                                <span class="s_website_form_mark">*</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="text"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="bank_account" required="1" placeholder=""
+                                                                       id="otcnk1vbkebpaa"
+                                                                       data-fill-with="bank_account"
+                                                                       t-att-value="lead.partner_id and lead.partner_id.bank_account or ''"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                     <div data-visibility-condition="" data-visibility-between=""
+                                                         class="form-group s_website_form_field col-12 s_website_form_required"
+                                                         data-type="char" data-name="Field">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label class=" col-sm-auto s_website_form_label "
+                                                                   style="width: 200px"
+                                                                   for="owtxa4wh65rs">
+                                                                <span class="s_website_form_label_content">Acepto para SEPA</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <div class="form-check">
+                                                                    <t t-if="lead.get_acept_sepa_boolean() == True">
+                                                                        <input type="checkbox" value="Yes"
+                                                                               class="s_website_form_input form-check-input"
+                                                                               name="accept_sepa" id="owtxa4wh65rs"
+                                                                               data-fill-with="undefined"
+                                                                               checked="checked"
+                                                                               />
+                                                                        <span class="invalid-feedback position-absolute">
+                                                                            <i class="fa fa-warning"/>
+                                                                        </span>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <input type="checkbox" value="Yes"
+                                                                               class="s_website_form_input form-check-input"
+                                                                               name="accept_sepa" id="owtxa4wh65rs"
+                                                                               data-fill-with="undefined"
+                                                                               />
+                                                                        <span class="invalid-feedback position-absolute">
+                                                                            <i class="fa fa-warning"/>
+                                                                        </span>
+                                                                    </t>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                     </div>
+
+                                                    <div
+                                                        class="form-group s_website_form_field col-12 s_website_form_field_hidden"
+                                                        style="display:none;"
+                                                        data-type="boolean" data-name="Field"
+                                                        data-visibility-condition=""
+                                                        data-visibility-between="">
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label class=" col-sm-auto s_website_form_label "
+                                                                   style="width: 200px"
+                                                                   for="owtxa4wh65r">
+                                                                <span class="s_website_form_label_content">Alumno</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <div class="form-check">
+                                                                    <input type="checkbox" value="Yes"
+                                                                           class="s_website_form_input form-check-input"
+                                                                           name="is_student" id="owtxa4wh65r"
+                                                                           data-fill-with="undefined"
+                                                                           checked="checked"/>
+                                                                    <span class="invalid-feedback position-absolute">
+                                                                        <i class="fa fa-warning"/>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label class=" col-sm-auto s_website_form_label "
+                                                                   style="width: 200px"
+                                                                   for="owtxa4wh65s">
+                                                                <span class="s_website_form_label_content">Lead</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="number" t-att-value="lead.id"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="lead"
+                                                                       id="owtxa4wh65s" data-fill-with="undefined"/>
+                                                                <span class="invalid-feedback position-absolute">
+                                                                    <i class="fa fa-warning"/>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                                            <label class=" col-sm-auto s_website_form_label "
+                                                                   style="width: 200px"
+                                                                   for="owtxa4wh65s7">
+                                                                <span class="s_website_form_label_content">Token</span>
+                                                            </label>
+                                                            <div class="col-sm">
+                                                                <input type="text" t-att-value="request.csrf_token()"
+                                                                       class="form-control s_website_form_input"
+                                                                       name="access_token"
+                                                                       id="owtxa4wh65s7" data-fill-with="undefined"/>
+                                                                <span class="invalid-feedback position-absolute">
+                                                                    <i class="fa fa-warning"/>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 s_website_form_submit">
+                                                    <div style="width: 185px;" class="s_website_form_label"/>
+                                                    <button class="btn btn-primary" type="submit">Validar</button>
+                                                </div>
+                                            </main>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!--                <div class="container">-->
+
+<!--                    <div class="alert alert-info"-->
+<!--                         t-if="lead.has_to_be_signed_student() or lead.has_to_be_signed_tutor()">-->
+<!--                        <i class="fa fa-info-circle"/>-->
+<!--                        <span>Por favor, cumplimente las firmas.</span>-->
+<!--                    </div>-->
+
+<!--                    <div class="row">-->
+<!--                        <div class="col-6" name="firma_alumno">-->
+<!--                            <t t-if="lead.has_to_be_signed_student()">-->
+<!--                                <div class="col-sm-auto mt8">-->
+<!--                                    <a role="button" class="btn btn-primary" data-toggle="modal"-->
+<!--                                       data-target="#modalaccept" href="#">Firma del alumno-->
+<!--                                    </a>-->
+<!--                                </div>-->
+<!--                                &lt;!&ndash; modal relative to the actions sign and pay &ndash;&gt;-->
+<!--                                <div id="quote_content" class="col-12 col-lg justify-content-end">-->
+<!--                                    <div role="dialog" class="modal fade" id="modalaccept">-->
+<!--                                        <div class="modal-dialog" t-if="lead.has_to_be_signed_student()">-->
+<!--                                            <form id="accept" method="POST" t-att-data-order-id="lead.id"-->
+<!--                                                  t-att-data-token="lead.access_token"-->
+<!--                                                  class="js_accept_json modal-content js_website_submit_form">-->
+<!--                                                <input type="hidden" name="csrf_token"-->
+<!--                                                       t-att-value="request.csrf_token()"/>-->
+<!--                                                <header class="modal-header">-->
+<!--                                                    <h4 class="modal-title">Firma del alumno</h4>-->
+<!--                                                    <button type="button" class="close" data-dismiss="modal"-->
+<!--                                                            aria-label="Close">×-->
+<!--                                                    </button>-->
+<!--                                                </header>-->
+<!--                                                <main class="modal-body" id="sign-dialog">-->
+<!--                                                    <p>-->
+<!--                                                        <span>Firma del alumno:-->
+<!--                                                            <b t-field="lead.partner_id"/>-->
+<!--                                                        </span>-->
+<!--                                                    </p>-->
+<!--                                                    <t t-call="portal.signature_form">-->
+<!--                                                        <t t-set="call_url"-->
+<!--                                                           t-value="lead._get_student_sign_url(lead,acces_token)"/>-->
+<!--                                                        <t t-set="default_name" t-value="lead.partner_id.name"/>-->
+<!--                                                    </t>-->
+<!--                                                </main>-->
+<!--                                            </form>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </t>-->
+<!--                            <t t-else="">-->
+<!--                                <section t-if="lead.student_signature" id="student_signature" name="Student Signature">-->
+<!--                                    <div name="student_signature">-->
+<!--                                        <div-->
+<!--                                            t-attf-class="ml-auto text-center">-->
+<!--                                            <h5>Firma alumno</h5>-->
+<!--                                            <img t-att-src="image_data_uri(lead.student_signature)"-->
+<!--                                                 style="max-height: 6rem; max-width: 100%;"/>-->
+<!--                                            <p t-field="lead.student_signed_by"/>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </section>-->
+<!--                            </t>-->
+<!--                        </div>-->
+<!--                        <div class="col-6" name="firma_tutor">-->
+<!--                            <t t-if="lead.has_to_be_signed_tutor()">-->
+<!--                                <div class="col-sm-auto mt8">-->
+<!--                                    <a role="button" class="btn btn-primary" data-toggle="modal"-->
+<!--                                       data-target="#modalaccepttutor"-->
+<!--                                       href="#">Firma del tutor-->
+<!--                                    </a>-->
+<!--                                </div>-->
+<!--                                <div id="quote_content" class="col-12 col-lg justify-content-end">-->
+<!--                                    <div role="dialog" class="modal fade" id="modalaccepttutor">-->
+<!--                                        <div class="modal-dialog" t-if="lead.has_to_be_signed_tutor()">-->
+<!--                                            <form id="accept" method="POST" t-att-data-order-id="lead.id"-->
+<!--                                                  t-att-data-token="lead.access_token"-->
+<!--                                                  class="js_accept_json modal-content js_website_submit_form">-->
+<!--                                                <input type="hidden" name="csrf_token"-->
+<!--                                                       t-att-value="request.csrf_token()"/>-->
+<!--                                                <header class="modal-header">-->
+<!--                                                    <h4 class="modal-title">Firma del tutor</h4>-->
+<!--                                                    <button type="button" class="close" data-dismiss="modal"-->
+<!--                                                            aria-label="Close">×-->
+<!--                                                    </button>-->
+<!--                                                </header>-->
+<!--                                                <main class="modal-body" id="sign-dialog">-->
+<!--                                                    <p>-->
+<!--                                                        <span>Firma del tutor legal del alumno:-->
+<!--                                                            <b t-field="lead.partner_id"/>-->
+<!--                                                        </span>-->
+<!--                                                    </p>-->
+<!--                                                    <t t-call="portal.signature_form">-->
+<!--                                                        <t t-set="call_url"-->
+<!--                                                           t-value="lead._get_tutor_sign_url(lead,acces_token)"/>-->
+<!--                                                        <t t-set="default_name" t-value=""/>-->
+<!--                                                    </t>-->
+<!--                                                </main>-->
+<!--                                            </form>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </t>-->
+<!--                            <t t-else="">-->
+<!--                                <section t-if="lead.tutor_signature" id="tutor_signature" name="Tutor Signature">-->
+<!--                                    <div name="tutor_signature">-->
+<!--                                        <div-->
+<!--                                            t-attf-class="ml-auto text-center">-->
+<!--                                            <h5>Firma Tutor</h5>-->
+<!--                                            <img t-att-src="image_data_uri(lead.tutor_signature)"-->
+<!--                                                 style="max-height: 6rem; max-width: 100%;"/>-->
+<!--                                            <p t-field="lead.tutor_signed_by"/>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </section>-->
+<!--                            </t>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </t>
+        </t>
+    </template>
+</odoo>

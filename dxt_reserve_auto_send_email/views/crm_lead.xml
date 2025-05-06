@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+<record id="crm_lead_signature" model="ir.ui.view">
+        <field name="name">crm.lead.signature</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="product_id" string="Curso" options="{'no_create': True}"/>
+                <field name="is_data_completed" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='lead']" position="inside">
+                <group string="Firmas">
+                    <field name="student_signature" string="Firma alumno" widget="signature"/>
+                    <field name="tutor_signature" string="Firma tutor" widget="signature"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

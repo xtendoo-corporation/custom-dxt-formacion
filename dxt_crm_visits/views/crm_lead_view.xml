@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 Xtendoo S.L.U. - Darío Cruz Mauro
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <record id="crm_lead_view_form" model="ir.ui.view">
+        <field name="name">crm.lead.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form" />
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Visitas">
+                    <group>
+                        <field name="visit" />
+                        <field
+                            name="date_visit"
+                            attrs="{'invisible':[('visit','=',False)]}"
+                        />
+                        <field
+                            name="place_visit_id"
+                            attrs="{'invisible':[('visit','=',False)]}"
+                        />
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+</odoo>
